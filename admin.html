@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin</title>
+    <script src="./script.js"></script>
+    <script>
+        function back(){
+            window.location.replace("./user.html?user=admin");
+        }
+        function setUser(event){
+            currentuser = event.target.value;
+        }
+        function setAccess(){
+            userAccess[currentuser] = updatedLinks
+            localStorage.setItem("userAccess",JSON.stringify(userAccess));
+        }
+        function setvalue(event){
+            checkbox = document.getElementById(event.target.id)
+            if (checkbox.checked==true){
+                updatedLinks.push(event.target.value);
+            } else{
+                // in case of unchecked remove access if present
+                let index = updatedLinks.indexOf(event.target.value)
+                if ( index > -1){
+                    updatedLinks.splice(index, 1);
+                }
+            }
+        }
+        window.onload = () => {
+            updatedLinks = [];
+            // populate users
+            let dropDownUserString = `<option value=select user>select user</option>`;
+            for(let i=0;i<users.length;i++){
+                dropDownUserString = dropDownUserString + `<option value=${users[i].username}>${users[i].username}</option>`
+            }
+            document.getElementById("usersList").innerHTML = dropDownUserString
+            // populate page links
+            let dropDownLinkString = ``;
+            for(let i=0;i<links.length;i++){
+                dropDownLinkString = dropDownLinkString + `<input type="checkbox" id= ${links[i]} value=${links[i]} onClick = setvalue(event)>${links[i]}</input><br>`
+            }
+            document.getElementById("usersLinks").innerHTML = dropDownLinkString  
+        };
+    </script>
+</head>
+<body>
+    <label>Choose a User:</label>
+    <select  name="usersList" id="usersList" onchange="setUser(event)"></select>
+    <br><br><br>
+    <label>Choose a Link to give access:</label>
+    <p name="usersLinks" id="usersLinks"></p>
+    <button type="button" onclick="setAccess()">Add Access</button>
+    <button type="button" onclick="redirectToIndex()">LOG OUT</button>
+    <button type="button" onclick="back()">BACK</button>`
+</body>
+
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>one</title>
+    <script src = "./script.js"></script>
+    <script>
+
+        function redirectToAdmin(){
+            window.location.replace("./admin.html");
+        }
+        function getParameterByName(name, url = window.location.href) {
+            name = name.replace(/[\[\]]/g, '\\$&');
+            var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+                results = regex.exec(url);
+            if (!results) return null;
+            if (!results[2]) return '';
+            return decodeURIComponent(results[2].replace(/\+/g, ' '));
+        }
+        window.onload = () => {
+            let username  = getParameterByName("user").toLowerCase();
+            if (isUserExist(username)==false){
+                document.getElementById("message").innerHTML = "User Not Found"
+            }
+            else{
+                let currentUserAccessArray = userAccess[username];
+                if (currentUserAccessArray == undefined || currentUserAccessArray.length == 0){
+                    document.getElementById("message").innerHTML = "user don't have access to any page"
+                } else{
+                    document.getElementById("message").innerHTML = "A valid user"
+                }
+                accessibleLinkButtonArrayString = ``
+                for (let i =0; i<currentUserAccessArray.length;i++){
+                    accessibleLinkButtonArrayString = accessibleLinkButtonArrayString + `<button id = ${currentUserAccessArray[i]} type="button" onclick="redirectTo${currentUserAccessArray[i].replace('.html','')}('${username}')" >${currentUserAccessArray[i]}</button>`
+                }
+                if (username == "admin"){
+                    accessibleLinkButtonArrayString = accessibleLinkButtonArrayString + `<br><br><br><button id = "admin-button" type="button" onclick="redirectToAdmin()" >Admin Section</button>`
+                }
+                document.getElementById("accessible").innerHTML = accessibleLinkButtonArrayString
+            }
+        } 
+    </script>
+</head>
+<body>
+    <div id = "message"></div>
+    <div id = "accessible"></div>
+    <br><br><br>
+    <button type="button" onclick="redirectToIndex()">LOG OUT</button>
+    
+</body>
+</html>

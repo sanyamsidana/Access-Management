@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>three</title>
+    <script src = "./script.js"></script>
+    <script>
+        function back(username){
+            window.location.replace("./user.html?user=" + username);
+        }
+        function getParameterByName(name, url = window.location.href) {
+            name = name.replace(/[\[\]]/g, '\\$&');
+            var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+                results = regex.exec(url);
+            if (!results) return null;
+            if (!results[2]) return '';
+            return decodeURIComponent(results[2].replace(/\+/g, ' '));
+        }
+        window.onload = () => {
+            let currentuser = getParameterByName("user");
+            if (currentuser == null){
+                document.getElementById("message").innerHTML = "pass user as query parameter"
+            }
+            else{
+                let currentUserAccessArray = userAccess[currentuser];
+                if (currentUserAccessArray != undefined && currentUserAccessArray.indexOf("three.html")>-1){
+                    document.getElementById("message").innerHTML = `HAVE ACCESS
+                    <br><button type="button" onclick="back('${currentuser}')">BACK</button>`
+                } else{
+                    document.getElementById("message").innerHTML = "Forbidden"
+                }
+            }
+
+        } 
+    </script>
+</head>
+<body>
+    <div id = "message"></div>
+    <button type="button" onclick="redirectToIndex()">LOG OUT</button>   
+</body>
+</html>
